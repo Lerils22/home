@@ -6,9 +6,6 @@ html{
     padding: 0;
     box-sizing: border-box;
 }
-.about{
-    justify-content: center;
-}
 body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
@@ -23,7 +20,7 @@ a {
 
 h1, h2 {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 18px;
     color: #fff;
 }
 
@@ -94,8 +91,11 @@ h1, h2 {
 section {
     padding: 5rem 2rem;
 }
-
+.skills{
+    margin-top: 50px;
+}
 .skills-list {
+    margin-top: 50px;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -125,10 +125,11 @@ section {
 }
 /* Projects */
 .projects {
+    margin-top: -10px;
     display: flex;
-    gap: 2rem;
+    gap: 50px;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap:wrap;
 }
 .img1{
     width: 100px;
@@ -146,13 +147,20 @@ section {
 .contame{
     color: #000000;
 }
+.text{
+    width: 50%;
+    height: 50px;
+    margin-left: 50vh;
+    margin-right: 50vh;
+    text-align: center;
+}
 .abame{
     color: #fff;
+
 }
 .project-card {
     background: #d5d5d5;
     width: 300px;
-    margin-top: 70px;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 1rem;
@@ -183,7 +191,7 @@ section {
 }
 .btn {
     display: inline-block;
-    margin-top: 20px; /* Moves the button 20px down */
+    margin-top: 20px;
 }
 .manik{
     margin-top:  15px;
@@ -192,14 +200,12 @@ section {
 /* Responsive Styles */
 @media (max-width: 768px) {
     .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+        flex-direction: row;
     }
 
     .nav-links {
-        flex-direction: column;
-        gap: 0.5rem;
+        gap: 1.5rem;
+        flex-direction:row;
     }
 
     .hero {
@@ -207,17 +213,16 @@ section {
     }
 
     .skills-list {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
     }
 
     .projects {
-        flex-direction: column;
-        gap: 1.5rem;
+        flex-direction: row;
+        gap: 7px;
     }
 
     .project-card {
-        width: 100%; /* Take full width of the container */
         box-sizing: border-box;
     }
 }
