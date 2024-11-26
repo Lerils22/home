@@ -29,7 +29,7 @@ h1, h2 {
     background: #333;
     color: #fff;
     padding: 1rem 2rem;
-    position: relative;
+    position:fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
@@ -235,6 +235,9 @@ section {
     .nav-links{
         margin-right: -15px;
     }
+    .hero{
+        margin-top: 35px;
+    }
     .manik{
         margin-left: -10px;
     }
@@ -247,6 +250,7 @@ section {
         text-align: center;
         font-size: small;
         width: 35vh;
+        margin-left: -20%;
     }
     .hero h1 {
         font-size: 1.8rem;
