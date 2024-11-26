@@ -241,7 +241,7 @@ section {
     .text{
         height:225px;
         display: block;
-        margin-left: 10%;
+        /*margin-left: 10%;*/
     }
     .abame{
         text-align: center;
