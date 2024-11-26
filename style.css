@@ -239,14 +239,14 @@ section {
         margin-left: -10px;
     }
     .text{
-        height:100px;
+        height:225px;
         display: block;
-        margin-left: 5%;
+        margin-left: 10%;
     }
     .abame{
         text-align: center;
         font-size: small;
-        width: 50vh;
+        width: 35vh;
     }
     .hero h1 {
         font-size: 1.8rem;
