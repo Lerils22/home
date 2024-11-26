@@ -228,6 +228,26 @@ section {
 }
 
 @media (max-width: 480px) {
+    .navbar{
+        flex-direction: row;
+        font-size: small;
+    }
+    .nav-links{
+        margin-right: -15px;
+    }
+    .manik{
+        margin-left: -10px;
+    }
+    .text{
+        height:100px;
+        display: block;
+        margin-left: 5%;
+    }
+    .abame{
+        text-align: center;
+        font-size: small;
+        width: 50vh;
+    }
     .hero h1 {
         font-size: 1.8rem;
     }
