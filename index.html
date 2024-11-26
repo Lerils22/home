@@ -3,46 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Games</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Professional Portfolio">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Fun Games</h1>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo"><a href="#hero"><h1 class="manik">Manik</h1></a></div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
     </header>
-    <nav>
-        <a href="https://lerils22.github.io/quiz/">Play Now</a>
-        <a href="#" id="contactButton">Contact</a>
-    </nav>
-    <div class="container">
-        <section id="about">
-            <h2>About the Game</h2>
-            <p>Welcome to the Fun Games! Join us in an exciting journey filled with challenges, puzzles, and discoveries.</p>
-        </section>
-        <section id="play">
-            <h2>Play Now</h2>
-            <div class="game-images">
-                <div class="game-img-wrapper">
-                    <a href="https://lerils22.github.io/quiz/">
-                        <img src="https://play-lh.googleusercontent.com/OcO41gFvRBA8quddPdvVGd5l_yYjZPxjBcW_aajihF3cFxnZZDofoGYJ3EGyo-26qFc=w240-h480-rw" alt="Quiz Game" class="game-img">
-                    </a>
-                </div>
-                <div class="game-img-wrapper">
-                    <a href="https://lerils22.github.io/Math-Quiz/">
-                        <img src="https://tr.rbxcdn.com/96f7250d29d956a45b65fbfa05f05b9e/150/150/Image/Png" alt="Math Quiz" class="game-img">
-                    </a>
-                </div>
-            </div>
-            <p>Click the images above to start your adventure!</p>
-        </section>
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <p>If you have any questions or feedback, feel free to contact us at <a href="mailto:contact@example.com">contact@example.com</a>.</p>
-        </section>
-    </div>
-    <footer>
-        <p>&copy; 2024 Fun Adventure Game. All rights reserved.</p>
+
+    <section class="hero">
+        <h1>Hi, I'm <span>Manik Magar</span></h1>
+        <p>A Web Developer Crafting Beautiful Experiences...</p>
+        <a href="#projects" class="btn">View My Work</a>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About Me</h2>
+        <p>I am a passionate web developer with a strong focus on building high-quality websites and applications that deliver exceptional user experiences. With expertise in modern web technologies, I specialize in creating user-friendly, responsive designs that adapt seamlessly across devices. My goal is to transform client ideas into functional, visually appealing, and efficient digital solutions. I am skilled in front-end and back-end development, ensuring that every project is both aesthetically pleasing and technically robust. Dedicated to meeting client objectives, I thrive on solving complex problems and continuously improving my craft to stay ahead in the dynamic world of web development.</p>
+    </section>
+
+    <section id="skills" class="skills">
+        <h2>Skills</h2>
+        <div class="skills-list">
+            <div class="skill">HTML5</div>
+            <div class="skill">CSS</div>
+            <div class="skill">JavaScript</div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <h2>Projects</h2>
+        <div class="project-card">
+            <a href="https://lerils22.github.io/tic-tac-toe/" target="_blank">
+            <img src="https://scontent.fktm14-1.fna.fbcdn.net/v/t39.30808-6/353058491_724795392984578_5274133204756814314_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Nr2y2mKOwk4Q7kNvgEBAcin&_nc_zt=23&_nc_ht=scontent.fktm14-1.fna&_nc_gid=ALuxUOxYtViq3ubunpb8CCk&oh=00_AYBa4-xafWvVdu4ILcbpR8fH_cb5w6LrhuDimzH-MVk40w&oe=674B1028 " class="img1">
+            <h3 class="projecta">Project One</h3>
+            <p>A responsive tic-tac-toe game made with html,css and javascript.</p></a>
+        </div>
+        <div class="project-card">
+            <a href=" https://lerils22.github.io/quiz/" target="_blank">
+            <img src="https://scontent.fktm14-1.fna.fbcdn.net/v/t1.6435-9/168668373_136544041809719_3428548339754352638_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=KK_6SJ27AZkQ7kNvgHM6KVE&_nc_zt=23&_nc_ht=scontent.fktm14-1.fna&_nc_gid=AY6WIRmVTyaCzc7VMie6bqA&oh=00_AYCSMMzRLVR0h76N90Svlbzq2_pCCSXnBa0XVplZyl995Q&oe=676CC150" class="img2">
+            <h3 class="projecta">Project Two</h3>
+            <p>A quiz game designed for educating childrens as a form of an entertainment.</p></a>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contact Me</h2>
+        <p>If you'd like to work together, feel free to reach out!</p>
+        <a href="mailto:magarmanik16@gmail.com" class="btn">Email Me</a>
+    </section>
+
+    <footer class="footer">
+        <p>© 2024 Manik Magar. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
 </body>
 </html>
