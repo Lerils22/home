@@ -200,11 +200,12 @@ section {
 /* Responsive Design */
 @media (max-width: 768px) {
     .navbar {
-        flex-direction: column;
+        flex-direction: row;
         gap: 1rem;
     }
 
     .hero {
+        margin-top: 150px;
         padding: 5rem 1rem;
     }
 
@@ -214,12 +215,17 @@ section {
     }
 
     .projects {
-        flex-direction: column;
-        gap: 2rem;
+        flex-direction: row;
+        gap: 0.5rem;
     }
-
+    .qqq{
+        width: 768px;
+        text-align: center;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
     .project-card {
-        width: 90%;
+        width: 250px;
     }
 
     .text {
@@ -255,8 +261,8 @@ section {
     }
 
     .nav-links {
-        flex-direction: column;
-        gap: 0.5rem;
+        flex-direction: row;
+        gap: 1rem;
     }
 
     .text {
