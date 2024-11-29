@@ -123,7 +123,14 @@ section {
     border: 1.5px solid #000000;
     border-radius: 5px;
 }
-/* Projects */
+.skill_3 {
+    background: #ff08ef;
+    color: #000000;
+    padding: 0.5rem 1rem;
+    border: 1.5px solid #000000;
+    border-radius: 5px;
+}
+
 .projects {
     margin-top: -10px;
     display: flex;
