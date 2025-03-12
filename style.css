@@ -82,6 +82,12 @@ nav {
     margin-top: 30px;
     margin-bottom: 150px;
 }
+#main3{
+    display:flex;
+    justify-content: center;
+    flex-direction:column;
+    align-items: center;
+}
 
 @keyframes fireBorder {
     0%, 100% {
