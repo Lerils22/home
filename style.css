@@ -87,9 +87,29 @@ nav {
     justify-content: center;
     align-items: center;
 }
-#main div{
+.rows{
+    display: flex;
+    justify-content: center;
+}
+.wawa{
     display:flex;
+    align-items: center;
     flex-direction:column;
+}
+.wawa a{
+    color: black;
+    font-size: 12px;
+    text-align: center;
+}
+.wawa div{
+    width: 150px;
+    height: 100px;display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background: wheat;
+    padding: 30px;
+    margin: 20px;
 }
 
 @keyframes fireBorder {
