@@ -101,9 +101,6 @@ nav {
     font-size: 20px;
     text-align: center;
 }
-.wawa a:hover{
-    color:black
-}
 .wawa div{
     width: 150px;
     height: 100px;display: flex;
@@ -231,15 +228,11 @@ nav {
     flex-direction: column;
     
 }
-#main3 ol{
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-}
 #main3 a{
     transition: transform, ease-in-out 0.3s;
 }
 #main3 a:hover{
+    color:black;
     transform: scale(1.1);
 }
 #main4{
