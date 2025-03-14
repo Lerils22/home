@@ -237,10 +237,9 @@ nav {
     justify-content: center;
 }
 #main3 a{
-    transition: transform, color, ease-in-out 0.3s;
+    transition: transform, ease-in-out 0.3s;
 }
 #main3 a:hover{
-    color: orange;
     transform: scale(1.1);
 }
 #main4{
