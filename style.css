@@ -98,8 +98,11 @@ nav {
 }
 .wawa a{
     color: black;
-    font-size: 12px;
+    font-size: 20px;
     text-align: center;
+}
+.wawa a:hover{
+    color:black
 }
 .wawa div{
     width: 150px;
@@ -107,7 +110,7 @@ nav {
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    background: rgb(241, 93, 0);
+    background: #FF6F00;
     padding: 30px;
     margin: 20px;
 }
