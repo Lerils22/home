@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>2D Obby Challenge</title>
 <style>
     :root {
@@ -16,35 +16,21 @@
     body {
         margin: 0;
         background-color: var(--bg-color);
-        color: var(--font-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        overflow: hidden; /* Prevent scrolling */
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        overflow: hidden;
     }
 
-    /* --- NEW: Responsive Game Container --- */
     #game-container {
-        position: relative;
+        position: absolute; /* Changed for scaling and positioning */
+        width: 960px;  /* Base game resolution */
+        height: 540px; /* Base game resolution */
         border: 3px solid var(--highlight-color);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         overflow: hidden;
-        
-        /* Force container to scale and fit within the viewport */
-        width: 100vw; 
-        height: calc(100vw * 9 / 16); /* 16:9 aspect ratio based on width */
-        max-height: 100vh;
-        max-width: calc(100vh * 16 / 9); /* 16:9 aspect ratio based on height */
+        transform-origin: top left; /* Make sure scaling happens from the corner */
     }
 
-    /* --- Make canvas fill the responsive container --- */
-    canvas { 
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
+    canvas { display: block; }
 
     #ui-overlay {
         position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -83,14 +69,7 @@
     #startButton:disabled { background-color: #555; cursor: not-allowed; }
 
     /* --- Player character --- */
-    #player-character { 
-        position: absolute; 
-        top: 0; 
-        left: 0; 
-        z-index: 10;
-        /* Prevent interactions with the player div itself */
-        pointer-events: none; 
-    }
+    #player-character { position: absolute; top: 0; left: 0; z-index: 10; }
     .mario-mushroom { position: relative; width: 12em; height: 12em; font-size: 3.5px; }
     .cap { position: absolute; top: 0; left: 0; width: 12em; height: 9em; background-color: #e43329; border: 0.5em solid #343434; border-radius: 6em 6em 1.5em 1.5em; overflow: hidden; box-shadow: inset 0 -0.5em 0.8em -0.2em rgba(0, 0, 0, 0.25); }
     .cap::before, .cap::after { content: ''; position: absolute; bottom: 1em; width: 2.8em; height: 2.8em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
@@ -143,7 +122,6 @@
     
     #jump-btn { width: 80px; height: 80px; }
 
-    /* Media query to show controls only on smaller (mobile) screens */
     @media (max-width: 768px) {
         #mobile-controls {
             display: block;
@@ -152,7 +130,6 @@
 </style>
 </head>
 <body>
-<!-- The rest of your body tag remains exactly the same -->
 <div id="game-container">
     <canvas id="gameCanvas" width="960" height="540"></canvas>
     <div id="player-character">
@@ -184,5 +161,26 @@
 
 <script src="levels.js" defer></script>
 <script src="game.js" defer></script>
+
+<!-- NEW SCRIPT for responsive scaling -->
+<script>
+    function resizeGame() {
+        const gameContainer = document.getElementById('game-container');
+        const gameWidth = 960;
+        const gameHeight = 540;
+
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        const scale = Math.min(windowWidth / gameWidth, windowHeight / gameHeight);
+
+        gameContainer.style.transform = `scale(${scale})`;
+        gameContainer.style.left = `${(windowWidth - gameWidth * scale) / 2}px`;
+        gameContainer.style.top = `${(windowHeight - gameHeight * scale) / 2}px`;
+    }
+
+    window.addEventListener('load', resizeGame);
+    window.addEventListener('resize', resizeGame);
+</script>
 </body>
 </html>
