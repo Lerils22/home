@@ -22,38 +22,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let fade = 0;
     let fadeState = "none";
     let nextLevel = 0;
+    // NEW: Add a global timer for sine wave calculation
+    let totalTime = 0;
 
     const player = { x: 0, y: 0, w: 42, h: 42, vx: 0, vy: 0, grounded: false, startX: 0, startY: 0 };
 
     // --- INPUT ---
-    // Keyboard Input
     window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
     window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
-    // --- NEW: Mobile Touch Input ---
     const leftBtn = document.getElementById('left-btn');
     const rightBtn = document.getElementById('right-btn');
     const jumpBtn = document.getElementById('jump-btn');
 
-    // Function to handle touch start
     function handleTouch(key, isPressed) {
         keys[key] = isPressed;
     }
 
-    // Left Button
     leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch('a', true); }, { passive: false });
     leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch('a', false); }, { passive: false });
-    leftBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); handleTouch('a', false); }, { passive: false });
-
-    // Right Button
     rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch('d', true); }, { passive: false });
     rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch('d', false); }, { passive: false });
-    rightBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); handleTouch('d', false); }, { passive: false });
-
-    // Jump Button
     jumpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch(' ', true); }, { passive: false });
     jumpBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch(' ', false); }, { passive: false });
-    jumpBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); handleTouch(' ', false); }, { passive: false });
     
     // --- COLLISION CHECK ---
     function collides(a, b) {
@@ -77,13 +68,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- UPDATE ---
     function update(dt) {
         if (!running || transitioning) return;
+        
+        // NEW: Increment global timer
+        totalTime += dt;
 
-        // Horizontal movement (Now works with 'a'/'d' from touch)
+        // NEW: Update moving and alternating platforms
+        platforms.forEach(p => {
+            // Handle alternating platforms
+            if (p.isAlternating) {
+                p.timer += dt;
+                if (p.timer >= p.interval) {
+                    p.timer = 0;
+                    p.type = (p.type === 'platform') ? 'lava' : 'platform';
+                }
+            }
+            // Handle moving platforms
+            if (p.type === 'moving') {
+                const oldX = p.x;
+                // Use a sine wave for smooth back-and-forth movement
+                const movement = Math.sin(totalTime * p.speed) * (p.moveDist / 2);
+                p.x = p.startX + (p.moveDist / 2) + movement;
+                p.dx = p.x - oldX; // Store the change in x for this frame
+            } else {
+                p.dx = 0; // Ensure non-moving platforms have no delta
+            }
+        });
+
+        // Horizontal movement
         player.vx = 0;
         if (keys['a'] || keys['arrowleft']) player.vx = -SPEED;
         if (keys['d'] || keys['arrowright']) player.vx = SPEED;
 
-        // Jump (Now works with ' ' from touch)
+        // Jump
         if ((keys['w'] || keys['arrowup'] || keys[' ']) && player.grounded) {
             player.vy = JUMP_FORCE;
             player.grounded = false;
@@ -94,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Horizontal collisions
         platforms.forEach(p => {
-            if (p.type === 'platform' && collides(player, p)) {
+            if ((p.type === 'platform' || p.type === 'moving') && collides(player, p)) {
                 if (player.vx > 0) player.x = p.x - player.w;
                 else if (player.vx < 0) player.x = p.x + p.width;
             }
@@ -105,11 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Vertical collisions
         platforms.forEach(p => {
-            if (p.type === 'platform' && collides(player, p)) {
+            if ((p.type === 'platform' || p.type === 'moving') && collides(player, p)) {
                 if (player.vy > 0 && player.y + player.h - player.vy <= p.y) {
                     player.y = p.y - player.h;
                     player.vy = 0;
                     player.grounded = true;
+                    // NEW: Make the player move with the platform
+                    player.x += p.dx;
                 } else if (player.vy < 0) {
                     player.y = p.y + p.height;
                     player.vy = 0;
@@ -117,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Interactions
+        // Interactions (lava, goal)
         for (let p of platforms) {
             if (collides(player, p)) {
                 if (p.type === 'lava') return respawn();
@@ -142,9 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.save();
         ctx.translate(camX, 0);
         platforms.forEach(p => {
+            // NEW: Added color for moving platforms
             ctx.fillStyle = (p.type === 'platform') ? '#2c3e50' :
                             (p.type === 'lava') ? '#e74c3c' :
-                            (p.type === 'goal') ? '#f1c40f' : '#9b59b6';
+                            (p.type === 'goal') ? '#f1c40f' :
+                            (p.type === 'moving') ? '#3498db' : '#9b59b6'; // Moving platform color
             ctx.fillRect(p.x, p.y, p.width, p.height);
         });
         ctx.restore();
@@ -184,10 +204,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LOAD LEVEL ---
     function loadLevel(i) {
-        if (i >= allLevels.length) return endGame("You Beat All 10 Levels!");
+        if (i >= allLevels.length) return endGame("You Beat All 20 Levels!");
         currentLevel = i;
         const data = allLevels[i];
-        platforms = data.platforms;
+        platforms = JSON.parse(JSON.stringify(data.platforms)); // Deep copy
+
+        // NEW: Initialize properties for special platforms
+        platforms.forEach(p => {
+            // Alternating platform setup
+            if (p.type === 'alternating') {
+                p.isAlternating = true;
+                p.timer = 0;
+                p.type = 'platform';
+            }
+            // Moving platform setup
+            if (p.type === 'moving') {
+                p.startX = p.x; // Store original starting position
+                p.dx = 0; // Initialize delta x
+            }
+        });
+
         resetPlayer(data.startPos.x, data.startPos.y);
         levelText.textContent = `Level: ${i + 1}`;
     }
@@ -197,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menu.classList.add('hidden');
         loadLevel(0);
         running = true;
+        totalTime = 0; // NEW: Reset the global timer on start
         startButton.blur();
     }
 
