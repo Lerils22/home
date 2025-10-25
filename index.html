@@ -25,14 +25,26 @@
         overflow: hidden;
     }
 
+    /* --- NEW: Responsive Game Container --- */
     #game-container {
         position: relative;
         border: 3px solid var(--highlight-color);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         overflow: hidden;
+        
+        /* Force container to scale and fit within the viewport */
+        width: 100vw; 
+        height: calc(100vw * 9 / 16); /* 16:9 aspect ratio based on width */
+        max-height: 100vh;
+        max-width: calc(100vh * 16 / 9); /* 16:9 aspect ratio based on height */
     }
 
-    canvas { display: block; }
+    /* --- Make canvas fill the responsive container --- */
+    canvas { 
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
 
     #ui-overlay {
         position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -71,7 +83,14 @@
     #startButton:disabled { background-color: #555; cursor: not-allowed; }
 
     /* --- Player character --- */
-    #player-character { position: absolute; top: 0; left: 0; z-index: 10; }
+    #player-character { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        z-index: 10;
+        /* Prevent interactions with the player div itself */
+        pointer-events: none; 
+    }
     .mario-mushroom { position: relative; width: 12em; height: 12em; font-size: 3.5px; }
     .cap { position: absolute; top: 0; left: 0; width: 12em; height: 9em; background-color: #e43329; border: 0.5em solid #343434; border-radius: 6em 6em 1.5em 1.5em; overflow: hidden; box-shadow: inset 0 -0.5em 0.8em -0.2em rgba(0, 0, 0, 0.25); }
     .cap::before, .cap::after { content: ''; position: absolute; bottom: 1em; width: 2.8em; height: 2.8em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
@@ -87,7 +106,7 @@
         background-color: #000; opacity: 0; pointer-events: none; z-index: 100;
     }
     
-    /* --- NEW: Mobile Controls --- */
+    /* --- Mobile Controls --- */
     #mobile-controls {
         display: none; /* Hidden by default on desktop */
         position: absolute;
@@ -133,6 +152,7 @@
 </style>
 </head>
 <body>
+<!-- The rest of your body tag remains exactly the same -->
 <div id="game-container">
     <canvas id="gameCanvas" width="960" height="540"></canvas>
     <div id="player-character">
@@ -143,7 +163,6 @@
     </div>
     <div id="ui-overlay"><div id="level-indicator"></div></div>
 
-    <!-- NEW: Mobile Control Buttons -->
     <div id="mobile-controls">
         <div id="move-controls" class="control-area">
             <div id="left-btn" class="control-btn">‹</div>
