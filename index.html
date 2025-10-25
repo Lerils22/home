@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2D Obby Challenge</title>
+<style>
+    :root {
+        --bg-color: #1a1a2e;
+        --font-color: #e0e0e0;
+        --accent-color: #16213e;
+        --highlight-color: #0f3460;
+        --action-color: #e94560;
+    }
+
+    body {
+        margin: 0;
+        background-color: var(--bg-color);
+        color: var(--font-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+    }
+
+    #game-container {
+        position: relative;
+        border: 3px solid var(--highlight-color);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+    }
+
+    canvas { display: block; }
+
+    #ui-overlay {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+    }
+
+    #level-indicator {
+        position: absolute; top: 10px; left: 10px;
+        font-size: 1.5rem; font-weight: bold; color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+
+    #menu {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(22, 33, 62, 0.85);
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        text-align: center; backdrop-filter: blur(4px); z-index: 20;
+        transition: opacity 0.3s ease;
+    }
+
+    #menu.hidden { opacity: 0; pointer-events: none; }
+    #menu h1 { font-size: 3rem; margin-bottom: 10px; color: white; text-shadow: 3px 3px 0px var(--action-color); }
+    #menu p { font-size: 1.1rem; max-width: 80%; }
+
+    #startButton {
+        padding: 15px 30px; font-size: 1.2rem;
+        background-color: var(--action-color); border: none; color: white;
+        border-radius: 8px; cursor: pointer; margin-top: 20px;
+        text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    #startButton:hover:not(:disabled) {
+        transform: scale(1.05); background-color: #f1687f;
+    }
+    #startButton:disabled { background-color: #555; cursor: not-allowed; }
+
+    /* --- Player character --- */
+    #player-character { position: absolute; top: 0; left: 0; z-index: 10; }
+    .mario-mushroom { position: relative; width: 12em; height: 12em; font-size: 3.5px; }
+    .cap { position: absolute; top: 0; left: 0; width: 12em; height: 9em; background-color: #e43329; border: 0.5em solid #343434; border-radius: 6em 6em 1.5em 1.5em; overflow: hidden; box-shadow: inset 0 -0.5em 0.8em -0.2em rgba(0, 0, 0, 0.25); }
+    .cap::before, .cap::after { content: ''; position: absolute; bottom: 1em; width: 2.8em; height: 2.8em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
+    .cap::before { left: -0.8em; } .cap::after { right: -0.8em; }
+    .spot { position: absolute; top: 0.8em; left: 50%; transform: translateX(-50%); width: 5em; height: 5em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
+    .stem { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 6em; height: 5em; background-color: #fce1b1; border: 0.5em solid #343434; border-top: none; border-radius: 0 0 2em 2em; }
+    .eye { position: absolute; bottom: 1.2em; width: 0.8em; height: 1.2em; background-color: #343434; border-radius: 0.4em; }
+    .eye:nth-of-type(1) { left: 1.4em; } .eye:nth-of-type(2) { right: 1.4em; }
+
+    /* Fade overlay for level transitions */
+    #transition-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #000; opacity: 0; pointer-events: none; z-index: 100;
+    }
+</style>
+</head>
+<body>
+<div id="game-container">
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+    <div id="player-character">
+        <div class="mario-mushroom">
+            <div class="cap"><div class="spot"></div></div>
+            <div class="stem"><div class="eye"></div><div class="eye"></div></div>
+        </div>
+    </div>
+    <div id="ui-overlay"><div id="level-indicator"></div></div>
+
+    <div id="menu">
+        <h1 id="menu-title">2D Obby Challenge</h1>
+        <p>Use arrow keys or A/D to move, and W or Space to jump.</p>
+        <button id="startButton" disabled>Loading...</button>
+    </div>
+
+    <div id="transition-overlay"></div>
+</div>
+
+<script src="levels.js" defer></script>
+<script src="game.js" defer></script>
+</body>
+</html>
