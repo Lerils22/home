@@ -86,6 +86,50 @@
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background-color: #000; opacity: 0; pointer-events: none; z-index: 100;
     }
+    
+    /* --- NEW: Mobile Controls --- */
+    #mobile-controls {
+        display: none; /* Hidden by default on desktop */
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        z-index: 50;
+        user-select: none; /* Prevent text selection on tap */
+    }
+
+    .control-area {
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        gap: 20px;
+    }
+    
+    #move-controls { left: 20px; }
+    #jump-control { right: 20px; }
+
+    .control-btn {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        color: white;
+        font-weight: bold;
+    }
+    
+    #jump-btn { width: 80px; height: 80px; }
+
+    /* Media query to show controls only on smaller (mobile) screens */
+    @media (max-width: 768px) {
+        #mobile-controls {
+            display: block;
+        }
+    }
 </style>
 </head>
 <body>
@@ -98,6 +142,17 @@
         </div>
     </div>
     <div id="ui-overlay"><div id="level-indicator"></div></div>
+
+    <!-- NEW: Mobile Control Buttons -->
+    <div id="mobile-controls">
+        <div id="move-controls" class="control-area">
+            <div id="left-btn" class="control-btn">‹</div>
+            <div id="right-btn" class="control-btn">›</div>
+        </div>
+        <div id="jump-control" class="control-area">
+            <div id="jump-btn" class="control-btn">▲</div>
+        </div>
+    </div>
 
     <div id="menu">
         <h1 id="menu-title">2D Obby Challenge</h1>
