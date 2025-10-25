@@ -1,120 +1,120 @@
 // GAME LEVEL DATABASE - 20 LEVELS WITH PROGRESSIVE DIFFICULTY
 // Calculations are corrected for player size (Max Gap: 198px, Max Height: 144px)
 const allLevels = [
-    // { // LEVEL 1: Welcome!
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-    //         // Gap: 80px. Very easy.
-    //         { x: 280, y: 480, width: 50, height: 40, type: 'platform' },
-    //         // Gap: 90px.
-    //         { x: 520, y: 460, width: 50, height: 40, type: 'platform' },
-    //         { x: 700, y: 410, width: 50, height: 50, type: 'goal' }
-    //     ]
-    // },
-    // { // LEVEL 2: First Hazard
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 250, height: 40, type: 'platform' },
-    //         // A simple 100px lava gap.
-    //         { x: 280, y: 430, width: 100, height: 20, type: 'lava' },
-    //         { x: 450, y: 500, width: 50, height: 40, type: 'platform' },
-    //         { x: 750, y: 450, width: 50, height: 50, type: 'goal' },
-    //     ]
-    // },
-    // { // LEVEL 3: The Climb
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 150, height: 40, type: 'platform' },
-    //         // Easy vertical steps.
-    //         { x: 250, y: 440, width: 120, height: 20, type: 'platform' },
-    //         { x: 450, y: 380, width: 120, height: 20, type: 'platform' },
-    //         { x: 450, y: 320, width: 20, height: 20, type: 'lava' },
-    //         { x: 600, y: 260, width: 50, height: 50, type: 'goal' },
-    //     ]
-    // },
-    // { // LEVEL 4: Stepping Stones
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-    //         // Moderate 120px gaps.
-    //         { x: 220, y: 500, width: 20, height: 20, type: 'platform' },
-    //         { x: 400, y: 450, width: 20, height: 30, type: 'platform' },
-    //         { x: 580, y: 500, width: 20, height: 20, type: 'platform' },
-    //         { x: 750, y: 450, width: 50, height: 50, type: 'goal' },
-    //     ]
-    // },
-    // { // LEVEL 5: The Floor is Lava
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 150, height: 40, type: 'platform' },
-    //         // Raises the stakes, but jumps are still easy (130px gap).
-    //         { x: 280, y: 480, width: 20, height: 50, type: 'platform' },
-    //         { x: 480, y: 460, width: 30, height: 20, type: 'platform' },
-    //         { x: 680, y: 440, width: 20, height: 20, type: 'platform' },
-    //         { x: 850, y: 390, width: 50, height:30, type: 'goal' },
-    //         { x: 0, y: 520, width: 1000, height: 20, type: 'lava' },
-    //     ]
-    // },
-    // { // LEVEL 6: A Little Tricky
-    //     startPos: { x: 50, y: 150 },
-    //     platforms: [
-    //         { x: 0, y: 200, width: 100, height: 40, type: 'platform' },
-    //         // First big drop.
-    //         { x: 200, y: 400, width: 100, height: 20, type: 'platform' },
-    //         { x: 450, y: 350, width: 30, height: 20, type: 'lava' },
-    //         // Gap is 150px. Getting challenging.
-    //         { x: 450, y: 400, width: 100, height: 20, type: 'platform' },
-    //         { x: 700, y: 330, width: 20, height: 20, type: 'platform' },
-    //         { x: 800, y: 220, width: 50, height: 50, type: 'goal' },
-    //         { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
-    //     ]
-    // },
-    // { // LEVEL 7: Narrow Paths
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-    //         // Gaps are moderate (140px), but platforms are smaller.
-    //         { x: 240, y: 500, width: 5, height: 20, type: 'platform' },
-    //         { x: 430, y: 500, width: 5, height: 20, type: 'platform' },
-    //         { x: 620, y: 500, width: 5, height: 20, type: 'platform' },
-    //         { x: 780, y: 450, width: 50, height: 50, type: 'goal' },
-    //         { x: 0, y: 520, width: 900, height: 20, type: 'lava' },
-    //     ]
-    // },
-    // { // LEVEL 8: The Hurdle
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 600, height: 40, type: 'platform' },
-    //         // Teaches the player to control jump height.
-    //         { x: 150, y: 500, width: 80, height: 20, type: 'lava' },
-    //         { x: 150, y: 380, width: 80, height: 60, type: 'lava' },
-    //         { x: 350, y: 420, width: 80, height: 20, type: 'lava' },
-    //         { x: 500, y: 450, width: 50, height: 50, type: 'goal' },
-    //     ]
-    // },
-    // { // LEVEL 9: Rising Tide
-    //     startPos: { x: 50, y: 450 },
-    //     platforms: [
-    //         { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-    //         // Vertical jumps are getting higher (100px).
-    //         { x: 220, y: 400, width: 5, height: 20, type: 'platform' },
-    //         { x: 100, y: 300, width: 5, height: 20, type: 'platform' },
-    //         { x: 200, y: 200, width: 5, height: 20, type: 'platform' },
-    //         { x: 350, y: 150, width: 50, height: 50, type: 'goal' },
-    //         { x: 0, y: 520, width: 500, height: 20, type: 'lava' },
-    //     ]
-    // },
-    // { // LEVEL 10: Leap of Faith
-    //     startPos: { x: 50, y: 100 },
-    //     platforms: [
-    //         { x: 0, y: 150, width: 100, height: 20, type: 'platform' },
-    //         // A long falling jump (180px gap) that requires trust.
-    //         { x: 280, y: 350, width: 2, height: 20, type: 'platform' },
-    //         { x: 600, y: 500, width: 50, height: 50, type: 'goal' },
-    //         { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
-    //     ]
-    // },
+    { // LEVEL 1: Welcome!
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
+            // Gap: 80px. Very easy.
+            { x: 280, y: 480, width: 50, height: 40, type: 'platform' },
+            // Gap: 90px.
+            { x: 520, y: 460, width: 50, height: 40, type: 'platform' },
+            { x: 700, y: 410, width: 50, height: 50, type: 'goal' }
+        ]
+    },
+    { // LEVEL 2: First Hazard
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 250, height: 40, type: 'platform' },
+            // A simple 100px lava gap.
+            { x: 280, y: 430, width: 100, height: 20, type: 'lava' },
+            { x: 450, y: 500, width: 50, height: 40, type: 'platform' },
+            { x: 750, y: 450, width: 50, height: 50, type: 'goal' },
+        ]
+    },
+    { // LEVEL 3: The Climb
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 150, height: 40, type: 'platform' },
+            // Easy vertical steps.
+            { x: 250, y: 440, width: 120, height: 20, type: 'platform' },
+            { x: 450, y: 380, width: 120, height: 20, type: 'platform' },
+            { x: 450, y: 320, width: 20, height: 20, type: 'lava' },
+            { x: 600, y: 260, width: 50, height: 50, type: 'goal' },
+        ]
+    },
+    { // LEVEL 4: Stepping Stones
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
+            // Moderate 120px gaps.
+            { x: 220, y: 500, width: 20, height: 20, type: 'platform' },
+            { x: 400, y: 450, width: 20, height: 30, type: 'platform' },
+            { x: 580, y: 500, width: 20, height: 20, type: 'platform' },
+            { x: 750, y: 450, width: 50, height: 50, type: 'goal' },
+        ]
+    },
+    { // LEVEL 5: The Floor is Lava
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 150, height: 40, type: 'platform' },
+            // Raises the stakes, but jumps are still easy (130px gap).
+            { x: 280, y: 480, width: 20, height: 50, type: 'platform' },
+            { x: 480, y: 460, width: 30, height: 20, type: 'platform' },
+            { x: 680, y: 440, width: 20, height: 20, type: 'platform' },
+            { x: 850, y: 390, width: 50, height:30, type: 'goal' },
+            { x: 0, y: 520, width: 1000, height: 20, type: 'lava' },
+        ]
+    },
+    { // LEVEL 6: A Little Tricky
+        startPos: { x: 50, y: 150 },
+        platforms: [
+            { x: 0, y: 200, width: 100, height: 40, type: 'platform' },
+            // First big drop.
+            { x: 200, y: 400, width: 100, height: 20, type: 'platform' },
+            { x: 450, y: 350, width: 30, height: 20, type: 'lava' },
+            // Gap is 150px. Getting challenging.
+            { x: 450, y: 400, width: 100, height: 20, type: 'platform' },
+            { x: 700, y: 330, width: 20, height: 20, type: 'platform' },
+            { x: 800, y: 220, width: 50, height: 50, type: 'goal' },
+            { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
+        ]
+    },
+    { // LEVEL 7: Narrow Paths
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
+            // Gaps are moderate (140px), but platforms are smaller.
+            { x: 240, y: 500, width: 5, height: 20, type: 'platform' },
+            { x: 430, y: 500, width: 5, height: 20, type: 'platform' },
+            { x: 620, y: 500, width: 5, height: 20, type: 'platform' },
+            { x: 780, y: 450, width: 50, height: 50, type: 'goal' },
+            { x: 0, y: 520, width: 900, height: 20, type: 'lava' },
+        ]
+    },
+    { // LEVEL 8: The Hurdle
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 600, height: 40, type: 'platform' },
+            // Teaches the player to control jump height.
+            { x: 150, y: 500, width: 80, height: 20, type: 'lava' },
+            { x: 150, y: 380, width: 80, height: 60, type: 'lava' },
+            { x: 350, y: 420, width: 80, height: 20, type: 'lava' },
+            { x: 500, y: 450, width: 50, height: 50, type: 'goal' },
+        ]
+    },
+    { // LEVEL 9: Rising Tide
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
+            // Vertical jumps are getting higher (100px).
+            { x: 220, y: 400, width: 5, height: 20, type: 'platform' },
+            { x: 100, y: 300, width: 5, height: 20, type: 'platform' },
+            { x: 200, y: 200, width: 5, height: 20, type: 'platform' },
+            { x: 350, y: 150, width: 50, height: 50, type: 'goal' },
+            { x: 0, y: 520, width: 500, height: 20, type: 'lava' },
+        ]
+    },
+    { // LEVEL 10: Leap of Faith
+        startPos: { x: 50, y: 100 },
+        platforms: [
+            { x: 0, y: 150, width: 100, height: 20, type: 'platform' },
+            // A long falling jump (180px gap) that requires trust.
+            { x: 280, y: 350, width: 2, height: 20, type: 'platform' },
+            { x: 600, y: 500, width: 50, height: 50, type: 'goal' },
+            { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
+        ]
+    },
     { // LEVEL 11: The Gauntlet
         startPos: { x: 50, y: 50 },
         platforms: [
@@ -233,4 +233,5 @@ const allLevels = [
             { x: -100, y: 520, width: 800, height: 20, type: 'lava' },
         ]
     }
+
 ];
