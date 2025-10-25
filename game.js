@@ -26,9 +26,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const player = { x: 0, y: 0, w: 42, h: 42, vx: 0, vy: 0, grounded: false, startX: 0, startY: 0 };
 
     // --- INPUT ---
+    // Keyboard Input
     window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
     window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 
+    // --- NEW: Mobile Touch Input ---
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+    const jumpBtn = document.getElementById('jump-btn');
+
+    // Function to handle touch start
+    function handleTouch(key, isPressed) {
+        keys[key] = isPressed;
+    }
+
+    // Left Button
+    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch('a', true); }, { passive: false });
+    leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch('a', false); }, { passive: false });
+    leftBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); handleTouch('a', false); }, { passive: false });
+
+    // Right Button
+    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch('d', true); }, { passive: false });
+    rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch('d', false); }, { passive: false });
+    rightBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); handleTouch('d', false); }, { passive: false });
+
+    // Jump Button
+    jumpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch(' ', true); }, { passive: false });
+    jumpBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch(' ', false); }, { passive: false });
+    jumpBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); handleTouch(' ', false); }, { passive: false });
+    
     // --- COLLISION CHECK ---
     function collides(a, b) {
         return (a.x < b.x + b.width && a.x + a.w > b.x && a.y < b.y + b.height && a.y + a.h > b.y);
@@ -52,12 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function update(dt) {
         if (!running || transitioning) return;
 
-        // Horizontal movement
+        // Horizontal movement (Now works with 'a'/'d' from touch)
         player.vx = 0;
         if (keys['a'] || keys['arrowleft']) player.vx = -SPEED;
         if (keys['d'] || keys['arrowright']) player.vx = SPEED;
 
-        // Jump
+        // Jump (Now works with ' ' from touch)
         if ((keys['w'] || keys['arrowup'] || keys[' ']) && player.grounded) {
             player.vy = JUMP_FORCE;
             player.grounded = false;
