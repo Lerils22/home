@@ -1,263 +1,197 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const playerEl = document.getElementById('player-character');
-    const levelText = document.getElementById('level-indicator');
-    const menu = document.getElementById('menu');
-    const startButton = document.getElementById('startButton');
-    const overlay = document.getElementById('transition-overlay');
-
-    // --- CONSTANTS ---
-    const GRAVITY = 0.5;
-    const JUMP_FORCE = -12;
-    const SPEED = 5;
-    const TRANSITION_SPEED = 2.0;
-
-    // --- STATE ---
-    let keys = {};
-    let currentLevel = 0;
-    let platforms = [];
-    let running = false;
-    let transitioning = false;
-    let fade = 0;
-    let fadeState = "none";
-    let nextLevel = 0;
-    // NEW: Add a global timer for sine wave calculation
-    let totalTime = 0;
-
-    const player = { x: 0, y: 0, w: 42, h: 42, vx: 0, vy: 0, grounded: false, startX: 0, startY: 0 };
-
-    // --- INPUT ---
-    window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
-    window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-    const leftBtn = document.getElementById('left-btn');
-    const rightBtn = document.getElementById('right-btn');
-    const jumpBtn = document.getElementById('jump-btn');
-
-    function handleTouch(key, isPressed) {
-        keys[key] = isPressed;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>2D Obby Challenge</title>
+<style>
+    :root {
+        --bg-color: #1a1a2e;
+        --font-color: #e0e0e0;
+        --accent-color: #16213e;
+        --highlight-color: #0f3460;
+        --action-color: #e94560;
     }
 
-    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch('a', true); }, { passive: false });
-    leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch('a', false); }, { passive: false });
-    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch('d', true); }, { passive: false });
-    rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch('d', false); }, { passive: false });
-    jumpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleTouch(' ', true); }, { passive: false });
-    jumpBtn.addEventListener('touchend', (e) => { e.preventDefault(); handleTouch(' ', false); }, { passive: false });
+    body {
+        margin: 0;
+        background-color: var(--bg-color);
+        overflow: hidden; /* Prevent scrolling */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #game-container {
+        position: absolute; /* Changed for scaling and positioning */
+        width: 960px;  /* Base game resolution */
+        height: 540px; /* Base game resolution */
+        border: 3px solid var(--highlight-color);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        transform-origin: top left; /* Make sure scaling happens from the corner */
+    }
+
+    canvas { display: block; }
+
+    #ui-overlay {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+    }
+
+    #level-indicator {
+        position: absolute; top: 10px; left: 10px;
+        font-size: 1.5rem; font-weight: bold; color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+
+    #menu {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(22, 33, 62, 0.85);
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        text-align: center; backdrop-filter: blur(4px); z-index: 20;
+        transition: opacity 0.3s ease;
+    }
+
+    #menu.hidden { opacity: 0; pointer-events: none; }
+    #menu h1 { font-size: 3rem; margin-bottom: 10px; color: white; text-shadow: 3px 3px 0px var(--action-color); }
+    #menu p { font-size: 1.1rem; max-width: 80%; }
+
+    #startButton {
+        padding: 15px 30px; font-size: 1.2rem;
+        background-color: var(--action-color); border: none; color: white;
+        border-radius: 8px; cursor: pointer; margin-top: 20px;
+        text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    #startButton:hover:not(:disabled) {
+        transform: scale(1.05); background-color: #f1687f;
+    }
+    #startButton:disabled { background-color: #555; cursor: not-allowed; }
+
+    /* --- Player character --- */
+    #player-character { position: absolute; top: 0; left: 0; z-index: 10; }
+    .mario-mushroom { position: relative; width: 12em; height: 12em; font-size: 3.5px; }
+    .cap { position: absolute; top: 0; left: 0; width: 12em; height: 9em; background-color: #e43329; border: 0.5em solid #343434; border-radius: 6em 6em 1.5em 1.5em; overflow: hidden; box-shadow: inset 0 -0.5em 0.8em -0.2em rgba(0, 0, 0, 0.25); }
+    .cap::before, .cap::after { content: ''; position: absolute; bottom: 1em; width: 2.8em; height: 2.8em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
+    .cap::before { left: -0.8em; } .cap::after { right: -0.8em; }
+    .spot { position: absolute; top: 0.8em; left: 50%; transform: translateX(-50%); width: 5em; height: 5em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
+    .stem { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 6em; height: 5em; background-color: #fce1b1; border: 0.5em solid #343434; border-top: none; border-radius: 0 0 2em 2em; }
+    .eye { position: absolute; bottom: 1.2em; width: 0.8em; height: 1.2em; background-color: #343434; border-radius: 0.4em; }
+    .eye:nth-of-type(1) { left: 1.4em; } .eye:nth-of-type(2) { right: 1.4em; }
+
+    /* Fade overlay for level transitions */
+    #transition-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #000; opacity: 0; pointer-events: none; z-index: 100;
+    }
     
-    // --- COLLISION CHECK ---
-    function collides(a, b) {
-        return (a.x < b.x + b.width && a.x + a.w > b.x && a.y < b.y + b.height && a.y + a.h > b.y);
+    /* --- Mobile Controls --- */
+    #mobile-controls {
+        display: none;
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        z-index: 50;
+        user-select: none;
     }
 
-    // --- PLAYER RESET ---
-    function resetPlayer(x, y) {
-        player.x = x; player.y = y; player.vx = 0; player.vy = 0;
-        player.startX = x; player.startY = y;
+    .control-area { position: absolute; bottom: 0; display: flex; gap: 20px; }
+    #move-controls { left: 20px; }
+    #jump-control { right: 20px; }
+    .control-btn {
+        width: 60px; height: 60px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        font-size: 2rem; color: white; font-weight: bold;
+    }
+    #jump-btn { width: 80px; height: 80px; }
+
+    @media (max-width: 768px) {
+        #mobile-controls { display: block; }
     }
 
-    // --- RESPAWN ---
-    function respawn() {
-        player.x = player.startX;
-        player.y = player.startY;
-        player.vx = 0;
-        player.vy = 0;
+    /* --- NEW: Orientation Overlay --- */
+    #orientation-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--bg-color);
+        color: white;
+        z-index: 200;
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
-
-    // --- UPDATE ---
-    function update(dt) {
-        if (!running || transitioning) return;
-        
-        // NEW: Increment global timer
-        totalTime += dt;
-
-        // NEW: Update moving and alternating platforms
-        platforms.forEach(p => {
-            // Handle alternating platforms
-            if (p.isAlternating) {
-                p.timer += dt;
-                if (p.timer >= p.interval) {
-                    p.timer = 0;
-                    p.type = (p.type === 'platform') ? 'lava' : 'platform';
-                }
-            }
-            // Handle moving platforms
-            if (p.type === 'moving') {
-                const oldX = p.x;
-                // Use a sine wave for smooth back-and-forth movement
-                const movement = Math.sin(totalTime * p.speed) * (p.moveDist / 2);
-                p.x = p.startX + (p.moveDist / 2) + movement;
-                p.dx = p.x - oldX; // Store the change in x for this frame
-            } else {
-                p.dx = 0; // Ensure non-moving platforms have no delta
-            }
-        });
-
-        // Horizontal movement
-        player.vx = 0;
-        if (keys['a'] || keys['arrowleft']) player.vx = -SPEED;
-        if (keys['d'] || keys['arrowright']) player.vx = SPEED;
-
-        // Jump
-        if ((keys['w'] || keys['arrowup'] || keys[' ']) && player.grounded) {
-            player.vy = JUMP_FORCE;
-            player.grounded = false;
+    .rotate-icon { width: 80px; height: 80px; margin-bottom: 20px; animation: rotate 2s linear infinite; }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    /* Media query to show the overlay ONLY on mobile-sized screens in portrait mode */
+    @media (orientation: portrait) and (max-width: 768px) {
+        #orientation-overlay {
+            display: flex;
         }
-
-        player.vy += GRAVITY;
-        player.x += player.vx;
-
-        // Horizontal collisions
-        platforms.forEach(p => {
-            if ((p.type === 'platform' || p.type === 'moving') && collides(player, p)) {
-                if (player.vx > 0) player.x = p.x - player.w;
-                else if (player.vx < 0) player.x = p.x + p.width;
-            }
-        });
-
-        player.y += player.vy;
-        player.grounded = false;
-
-        // Vertical collisions
-        platforms.forEach(p => {
-            if ((p.type === 'platform' || p.type === 'moving') && collides(player, p)) {
-                if (player.vy > 0 && player.y + player.h - player.vy <= p.y) {
-                    player.y = p.y - player.h;
-                    player.vy = 0;
-                    player.grounded = true;
-                    // NEW: Make the player move with the platform
-                    player.x += p.dx;
-                } else if (player.vy < 0) {
-                    player.y = p.y + p.height;
-                    player.vy = 0;
-                }
-            }
-        });
-
-        // Interactions (lava, goal)
-        for (let p of platforms) {
-            if (collides(player, p)) {
-                if (p.type === 'lava') return respawn();
-                if (p.type === 'goal') return startTransition(currentLevel + 1);
-            }
-        }
-
-        // Fall off map
-        if (player.y > canvas.height + 400) respawn();
     }
+</style>
+</head>
+<body>
+<div id="game-container">
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+    <div id="player-character">
+        <div class="mario-mushroom">
+            <div class="cap"><div class="spot"></div></div>
+            <div class="stem"><div class="eye"></div><div class="eye"></div></div>
+        </div>
+    </div>
+    <div id="ui-overlay"><div id="level-indicator"></div></div>
+    <div id="mobile-controls">
+        <div id="move-controls" class="control-area">
+            <div id="left-btn" class="control-btn">‹</div>
+            <div id="right-btn" class="control-btn">›</div>
+        </div>
+        <div id="jump-control" class="control-area">
+            <div id="jump-btn" class="control-btn">▲</div>
+        </div>
+    </div>
+    <div id="menu">
+        <h1 id="menu-title">2D Obby Challenge</h1>
+        <p>Use arrow keys or A/D to move, and W or Space to jump.</p>
+        <button id="startButton" disabled>Loading...</button>
+    </div>
+    <div id="transition-overlay"></div>
+</div>
 
-    // --- DRAW ---
-    function draw() {
-        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        grad.addColorStop(0, '#87CEEB');
-        grad.addColorStop(1, '#ADD8E6');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+<!-- NEW: Orientation Overlay HTML -->
+<div id="orientation-overlay">
+    <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.8893 7.1107C15.918 6.13945 14.7334 5.4147 13.4357 5.01358C12.138 4.61246 10.7686 4.54694 9.44422 4.8235C8.11987 5.10006 6.8876 5.71018 5.86469 6.59853C4.84178 7.48688 4.06222 8.62734 3.60686 9.90955" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.3931 14.0905C19.9378 15.3727 19.1582 16.5131 18.1353 17.4015C17.1124 18.2898 15.8801 18.8999 14.5558 19.1765C13.2314 19.4531 11.862 19.3875 10.5643 18.9864C9.26661 18.5853 8.08199 17.8606 7.11074 16.8893L3.60693 20.3931" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3.60693 14.0905V20.3931H9.90953" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.3931 9.90945V3.60685H14.0905" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p>Please rotate your device to landscape mode.</p>
+</div>
 
-        const camX = -player.x + canvas.width / 2;
-
-        ctx.save();
-        ctx.translate(camX, 0);
-        platforms.forEach(p => {
-            // NEW: Added color for moving platforms
-            ctx.fillStyle = (p.type === 'platform') ? '#2c3e50' :
-                            (p.type === 'lava') ? '#e74c3c' :
-                            (p.type === 'goal') ? '#f1c40f' :
-                            (p.type === 'moving') ? '#3498db' : '#9b59b6'; // Moving platform color
-            ctx.fillRect(p.x, p.y, p.width, p.height);
-        });
-        ctx.restore();
-
-        playerEl.style.transform = `translate(${player.x + camX}px, ${player.y}px)`;
+<script src="levels.js" defer></script>
+<script src="game.js" defer></script>
+<script>
+    function resizeGame() {
+        const gameContainer = document.getElementById('game-container');
+        const gameWidth = 960; const gameHeight = 540;
+        const windowWidth = window.innerWidth; const windowHeight = window.innerHeight;
+        const scale = Math.min(windowWidth / gameWidth, windowHeight / gameHeight);
+        gameContainer.style.transform = `scale(${scale})`;
+        gameContainer.style.left = `${(windowWidth - gameWidth * scale) / 2}px`;
+        gameContainer.style.top = `${(windowHeight - gameHeight * scale) / 2}px`;
     }
-
-    // --- LEVEL TRANSITION ---
-    function startTransition(levelIndex) {
-        if (transitioning) return;
-        transitioning = true;
-        fadeState = "out";
-        nextLevel = levelIndex;
-    }
-
-    function handleTransition(dt) {
-        if (!transitioning) return;
-
-        if (fadeState === "out") {
-            fade += TRANSITION_SPEED * dt;
-            if (fade >= 1) {
-                fade = 1;
-                loadLevel(nextLevel);
-                fadeState = "in";
-            }
-        } else if (fadeState === "in") {
-            fade -= TRANSITION_SPEED * dt;
-            if (fade <= 0) {
-                fade = 0;
-                transitioning = false;
-                fadeState = "none";
-            }
-        }
-
-        overlay.style.opacity = fade;
-    }
-
-    // --- LOAD LEVEL ---
-    function loadLevel(i) {
-        if (i >= allLevels.length) return endGame("You Beat All 20 Levels!");
-        currentLevel = i;
-        const data = allLevels[i];
-        platforms = JSON.parse(JSON.stringify(data.platforms)); // Deep copy
-
-        // NEW: Initialize properties for special platforms
-        platforms.forEach(p => {
-            // Alternating platform setup
-            if (p.type === 'alternating') {
-                p.isAlternating = true;
-                p.timer = 0;
-                p.type = 'platform';
-            }
-            // Moving platform setup
-            if (p.type === 'moving') {
-                p.startX = p.x; // Store original starting position
-                p.dx = 0; // Initialize delta x
-            }
-        });
-
-        resetPlayer(data.startPos.x, data.startPos.y);
-        levelText.textContent = `Level: ${i + 1}`;
-    }
-
-    // --- GAME CONTROL ---
-    function startGame() {
-        menu.classList.add('hidden');
-        loadLevel(0);
-        running = true;
-        totalTime = 0; // NEW: Reset the global timer on start
-        startButton.blur();
-    }
-
-    function endGame(msg) {
-        running = false;
-        menu.classList.remove('hidden');
-        document.getElementById('menu-title').textContent = msg;
-        startButton.textContent = "Play Again";
-    }
-
-    // --- LOOP ---
-    let last = 0;
-    function loop(t) {
-        const dt = (t - last) / 1000;
-        last = t;
-        handleTransition(dt);
-        update(dt);
-        draw();
-        requestAnimationFrame(loop);
-    }
-
-    startButton.addEventListener('click', startGame);
-    startButton.disabled = false;
-    startButton.textContent = "Start Game";
-
-    requestAnimationFrame(loop);
-});
+    window.addEventListener('load', resizeGame);
+    window.addEventListener('resize', resizeGame);
+</script>
+</body>
+</html>
