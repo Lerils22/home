@@ -1,14 +1,11 @@
 // GAME LEVEL DATABASE - 20 LEVELS WITH PROGRESSIVE DIFFICULTY
-// Calculations are corrected for player size (Max Gap: 198px, Max Height: 144px)
 const allLevels = [
     { // LEVEL 1: Welcome!
         startPos: { x: 50, y: 450 },
         platforms: [
-            { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-            // Gap: 80px. Very easy.
-            { x: 280, y: 480, width: 50, height: 40, type: 'platform' },
-            // Gap: 90px.
-            { x: 520, y: 460, width: 50, height: 40, type: 'platform' },
+            { x: 0, y: 500, width: 200, height: 40, type: 'platform' },
+            { x: 280, y: 480, width: 100, height: 40, type: 'platform' },
+            { x: 520, y: 460, width: 100, height: 40, type: 'platform' },
             { x: 700, y: 410, width: 50, height: 50, type: 'goal' }
         ]
     },
@@ -16,9 +13,8 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 250, height: 40, type: 'platform' },
-            // A simple 100px lava gap.
-            { x: 280, y: 430, width: 100, height: 20, type: 'lava' },
-            { x: 450, y: 500, width: 50, height: 40, type: 'platform' },
+            { x: 280, y: 500, width: 100, height: 20, type: 'lava' },
+            { x: 450, y: 500, width: 250, height: 40, type: 'platform' },
             { x: 750, y: 450, width: 50, height: 50, type: 'goal' },
         ]
     },
@@ -26,7 +22,6 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 150, height: 40, type: 'platform' },
-            // Easy vertical steps.
             { x: 250, y: 440, width: 120, height: 20, type: 'platform' },
             { x: 450, y: 380, width: 120, height: 20, type: 'platform' },
             { x: 450, y: 320, width: 20, height: 20, type: 'lava' },
@@ -37,10 +32,9 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-            // Moderate 120px gaps.
-            { x: 220, y: 500, width: 20, height: 20, type: 'platform' },
-            { x: 400, y: 450, width: 20, height: 30, type: 'platform' },
-            { x: 580, y: 500, width: 20, height: 20, type: 'platform' },
+            { x: 220, y: 500, width: 30, height: 20, type: 'platform' },
+            { x: 400, y: 480, width: 30, height: 30, type: 'platform' },
+            { x: 580, y: 500, width: 30, height: 20, type: 'platform' },
             { x: 750, y: 450, width: 50, height: 50, type: 'goal' },
         ]
     },
@@ -48,10 +42,9 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 150, height: 40, type: 'platform' },
-            // Raises the stakes, but jumps are still easy (130px gap).
-            { x: 280, y: 480, width: 20, height: 50, type: 'platform' },
-            { x: 480, y: 460, width: 30, height: 20, type: 'platform' },
-            { x: 680, y: 440, width: 20, height: 20, type: 'platform' },
+            { x: 280, y: 480, width: 40, height: 50, type: 'platform' },
+            { x: 480, y: 460, width: 40, height: 20, type: 'platform' },
+            { x: 680, y: 440, width: 40, height: 20, type: 'platform' },
             { x: 850, y: 390, width: 50, height:30, type: 'goal' },
             { x: 0, y: 520, width: 1000, height: 20, type: 'lava' },
         ]
@@ -60,12 +53,10 @@ const allLevels = [
         startPos: { x: 50, y: 150 },
         platforms: [
             { x: 0, y: 200, width: 100, height: 40, type: 'platform' },
-            // First big drop.
             { x: 200, y: 400, width: 100, height: 20, type: 'platform' },
             { x: 450, y: 350, width: 30, height: 20, type: 'lava' },
-            // Gap is 150px. Getting challenging.
             { x: 450, y: 400, width: 100, height: 20, type: 'platform' },
-            { x: 700, y: 330, width: 20, height: 20, type: 'platform' },
+            { x: 700, y: 330, width: 40, height: 20, type: 'platform' },
             { x: 800, y: 220, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
         ]
@@ -74,10 +65,9 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-            // Gaps are moderate (140px), but platforms are smaller.
-            { x: 240, y: 500, width: 5, height: 20, type: 'platform' },
-            { x: 430, y: 500, width: 5, height: 20, type: 'platform' },
-            { x: 620, y: 500, width: 5, height: 20, type: 'platform' },
+            { x: 240, y: 500, width: 15, height: 20, type: 'platform' },
+            { x: 430, y: 500, width: 15, height: 20, type: 'platform' },
+            { x: 620, y: 500, width: 15, height: 20, type: 'platform' },
             { x: 780, y: 450, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 900, height: 20, type: 'lava' },
         ]
@@ -86,10 +76,9 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 600, height: 40, type: 'platform' },
-            // Teaches the player to control jump height.
             { x: 150, y: 500, width: 80, height: 20, type: 'lava' },
-            { x: 150, y: 380, width: 80, height: 60, type: 'lava' },
-            { x: 350, y: 420, width: 80, height: 20, type: 'lava' },
+            { x: 150, y: 440, width: 80, height: 60, type: 'platform' }, // Changed to platform to be a hurdle
+            { x: 350, y: 420, width: 80, height: 80, type: 'lava' },
             { x: 500, y: 450, width: 50, height: 50, type: 'goal' },
         ]
     },
@@ -97,10 +86,9 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-            // Vertical jumps are getting higher (100px).
-            { x: 220, y: 400, width: 5, height: 20, type: 'platform' },
-            { x: 100, y: 300, width: 5, height: 20, type: 'platform' },
-            { x: 200, y: 200, width: 5, height: 20, type: 'platform' },
+            { x: 220, y: 400, width: 30, height: 20, type: 'platform' },
+            { x: 100, y: 300, width: 30, height: 20, type: 'platform' },
+            { x: 200, y: 200, width: 30, height: 20, type: 'platform' },
             { x: 350, y: 150, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 500, height: 20, type: 'lava' },
         ]
@@ -109,8 +97,7 @@ const allLevels = [
         startPos: { x: 50, y: 100 },
         platforms: [
             { x: 0, y: 150, width: 100, height: 20, type: 'platform' },
-            // A long falling jump (180px gap) that requires trust.
-            { x: 280, y: 350, width: 2, height: 20, type: 'platform' },
+            { x: 280, y: 350, width: 80, height: 20, type: 'platform' },
             { x: 600, y: 500, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
         ]
@@ -119,9 +106,8 @@ const allLevels = [
         startPos: { x: 50, y: 50 },
         platforms: [
             { x: 0, y: 100, width: 80, height: 40, type: 'platform' },
-            // Gaps are consistently challenging now (160px).
-            { x: 240, y: 480, width: 10, height: 20, type: 'platform' },
-            { x: 460, y: 460, width: 5, height: 20, type: 'platform' },
+            { x: 240, y: 480, width: 30, height: 20, type: 'platform' },
+            { x: 460, y: 460, width: 30, height: 20, type: 'platform' },
             { x: 700, y: 400, width: 10, height: 5, type: 'lava' },
             { x: 680, y: 440, width: 60, height: 20, type: 'platform' },
             { x: 850, y: 390, width: 50, height: 50, type: 'goal' },
@@ -132,9 +118,7 @@ const allLevels = [
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 80, height: 40, type: 'platform' },
-            // A 170px jump to the right...
             { x: 250, y: 400, width: 60, height: 20, type: 'platform' },
-            // ...then a 140px jump back to the left.
             { x: 150, y: 270, width: 60, height: 20, type: 'platform' },
             { x: 150, y: 50, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 400, height: 20, type: 'lava' },
@@ -144,37 +128,33 @@ const allLevels = [
         startPos: { x: 50, y: 150 },
         platforms: [
             { x: 0, y: 200, width: 100, height: 20, type: 'platform' },
-            // A long jump over a pit. Gap: 180px.
-            { x: 280, y: 200, width: 10, height: 20, type: 'platform' },
-            { x: 480, y: 400, width: 5, height: 5, type: 'platform' },
-            { x: 650, y: 300, width: 5, height: 5, type: 'platform' },
-            { x: 800, y: 200, width: 5, height: 5, type: 'platform' },
+            { x: 280, y: 200, width: 40, height: 20, type: 'platform' },
+            { x: 480, y: 400, width: 40, height: 20, type: 'platform' },
+            { x: 650, y: 300, width: 40, height: 20, type: 'platform' },
+            { x: 800, y: 200, width: 40, height: 20, type: 'platform' },
             { x: 950, y: 100, width: 50, height: 50, type: 'goal' },
-            { x: 0, y: 520, width: 800, height: 20, type: 'lava' }, 
+            { x: 0, y: 520, width: 800, height: 20, type: 'lava' },
         ]
     },
     { // LEVEL 14: Don't Look Down
         startPos: { x: 50, y: 250 },
         platforms: [
-            // A series of 185px gaps, requires consistent execution.
             { x: 0, y: 300, width: 80, height: 40, type: 'platform' },
             { x: 265, y: 200, width: 60, height: 20, type: 'platform' },
-            { x: 265, y: 100, width: 60, height: 20, type: 'platform' },
-            { x: 555, y: 100, width: 60, height: 20, type: 'platform' },
+            { x: 455, y: 100, width: 60, height: 20, type: 'platform' },
             { x: 650, y: 150, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 1000, height: 20, type: 'lava' },
         ]
     },
- { // LEVEL 15: The Limit
+    { // LEVEL 15: The Vanishing Road
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-            // NEW: This platform will alternate between 'platform' and 'lava' every 1.5 seconds.
-            { x: 295, y: 500, width: 10, height: 40, type: 'alternating', interval: 1.5 },
-            { x: 395, y: 500, width: 10, height: 40, type: 'alternating', interval: 1 },
-            { x: 495, y: 500, width: 10, height: 40, type: 'alternating', interval: 2 },
-            { x: 550, y: 450, width: 50, height: 50, type: 'goal' },
-            { x: 0, y: 520, width: 600, height: 20, type: 'lava' },
+            { x: 250, y: 500, width: 40, height: 40, type: 'alternating', interval: 1.5 },
+            { x: 450, y: 500, width: 40, height: 40, type: 'alternating', interval: 1.0 },
+            { x: 650, y: 500, width: 40, height: 40, type: 'alternating', interval: 2.0 },
+            { x: 800, y: 450, width: 50, height: 50, type: 'goal' },
+            { x: 0, y: 520, width: 900, height: 20, type: 'lava' },
         ]
     },
     { // LEVEL 16: Needle Point
@@ -184,43 +164,50 @@ const allLevels = [
             { x: 0, y: 400, width: 100, height: 40, type: 'platform' },
             { x: 0, y: 300, width: 100, height: 40, type: 'platform' },
             { x: 200, y: 300, width: 20, height: 20, type: 'platform' },
-            { x: 300, y: 300, width: 20, height: 20, type: 'goal' },
+            { x: 300, y: 300, width: 50, height: 50, type: 'goal' },
             { x: 0, y: 520, width: 700, height: 20, type: 'lava' },
         ]
     },
-     { // LEVEL 17: Maximum Altitude
+    { // LEVEL 17: Moving Up
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
-            { 
-                x: 200, y: 365, width: 80, height: 20, type: 'moving', 
-                moveDist: 250, 
-                speed: 2.5 
-            },
-            { 
-                x: 100, y: 235, width: 60, height: 20, type: 'moving', 
-                moveDist: 250, 
-                speed: 3 
-            },
+            { x: 200, y: 365, width: 80, height: 20, type: 'moving', moveDist: 250, speed: 1.5 },
+            { x: 100, y: 235, width: 60, height: 20, type: 'moving', moveDist: -200, speed: 1.0 },
             { x: 200, y: 100, width: 50, height: 50, type: 'goal' },
-            { x: 0, y: 520, width: 400, height: 20, type: 'lava' },
+            { x: -100, y: 520, width: 600, height: 20, type: 'lava' },
+        ]
+    },
+    { // LEVEL 18: The Squeeze (NEW)
+        startPos: { x: 50, y: 100 },
+        platforms: [
+            { x: 0, y: 500, width: 900, height: 40, type: 'platform' },
+            { x: 100, y: 200, width: 40, height: 300, type: 'platform' },
+            { x: 250, y: 0, width: 40, height: 350, type: 'platform' },
+            { x: 400, y: 200, width: 40, height: 300, type: 'platform' },
+            { x: 550, y: 0, width: 40, height: 350, type: 'platform' },
+            { x: 700, y: 200, width: 40, height: 300, type: 'platform' },
+            { x: 800, y: 450, width: 50, height: 50, type: 'goal' }
+        ]
+    },
+    { // LEVEL 19: Alternating Ascent (NEW)
+        startPos: { x: 50, y: 450 },
+        platforms: [
+            { x: 0, y: 500, width: 100, height: 40, type: 'platform' },
+            { x: 200, y: 400, width: 80, height: 20, type: 'alternating', interval: 1.0 },
+            { x: 350, y: 300, width: 80, height: 20, type: 'alternating', interval: 1.2 },
+            { x: 200, y: 200, width: 80, height: 20, type: 'alternating', interval: 1.4 },
+            { x: 350, y: 100, width: 50, height: 50, type: 'goal' },
+            { x: 0, y: 520, width: 500, height: 20, type: 'lava' },
         ]
     },
     { // LEVEL 20: The Finale
         startPos: { x: 50, y: 450 },
         platforms: [
             { x: 0, y: 500, width: 80, height: 40, type: 'platform' },
-            { 
-                x: 275, y: 480, width: 20, height: 20, type: 'moving',
-                moveDist: 100, 
-                speed: 2
-            },
-            { 
-                x: 400, y: 350, width: 20, height: 20, type: 'moving',
-                moveDist: 80, 
-                speed: 1
-            },
-            { x: 200, y: 250, width: 100, height: 20, type: 'alternating', interval: 1 },
+            { x: 275, y: 480, width: 40, height: 20, type: 'moving', moveDist: 100, speed: 2 },
+            { x: 400, y: 350, width: 40, height: 20, type: 'moving', moveDist: -80, speed: 1 },
+            { x: 200, y: 250, width: 100, height: 20, type: 'alternating', interval: 1.2 },
             { x: 495, y: 200, width: 100, height: 40, type: 'platform' },
             { x: 600, y: 150, width: 50, height: 40, type: 'goal' },
             { x: -100, y: 520, width: 800, height: 20, type: 'lava' },
