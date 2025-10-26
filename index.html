@@ -106,7 +106,7 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 120px;
+        height: 140px; /* Increased height to contain larger buttons */
         z-index: 50;
         user-select: none;
         pointer-events: all;
@@ -114,8 +114,28 @@
     .control-area { position: absolute; bottom: 20px; display: flex; gap: 20px; }
     #move-controls { left: 20px; }
     #jump-control { right: 20px; }
-    .control-btn { width: 60px; height: 60px; background-color: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; color: white; font-weight: bold; }
-    #jump-btn { width: 80px; height: 80px; }
+    .control-btn {
+        /* CORRECTED: Increased size for better usability */
+        width: 80px; height: 80px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        /* CORRECTED: Adjusted font size */
+        font-size: 2.5rem;
+        color: white; font-weight: bold;
+        transition: transform 0.1s ease, background-color 0.1s ease;
+    }
+    #jump-btn {
+        /* CORRECTED: Increased size for the primary action button */
+        width: 100px; height: 100px;
+    }
+    /* NEW: Added active state for tactile feedback */
+    .control-btn:active {
+        transform: scale(0.95);
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+    
     #orientation-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: white; z-index: 300; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
     .rotate-icon { width: 80px; height: 80px; margin-bottom: 20px; animation: rotate 2s linear infinite; }
     @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -125,7 +145,6 @@
         #mobile-controls { display: block; }
         #in-game-controls { display: none; }
         #mobile-game-controls { display: flex; }
-        /* CORRECTED: Only the paragraph is hidden. The skin selector is now ALWAYS visible. */
         #menu p { display: none; } 
         #menu h1 { font-size: 2rem; }
     }
