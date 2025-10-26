@@ -12,37 +12,49 @@
         --highlight-color: #0f3460;
         --action-color: #e94560;
     }
+
     body {
         margin: 0;
         background-color: var(--bg-color);
-        overflow: hidden;
+        overflow: hidden; /* Prevent scrolling */
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     #game-container {
-        position: absolute;
-        width: 960px; height: 540px;
+        position: absolute; /* Changed for scaling and positioning */
+        width: 960px;  /* Base game resolution */
+        height: 540px; /* Base game resolution */
         border: 3px solid var(--highlight-color);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         overflow: hidden;
-        transform-origin: top left;
+        transform-origin: top left; /* Make sure scaling happens from the corner */
     }
-    canvas { display: block; background-color: #87CEEB; }
-    #ui-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; }
+
+    canvas { display: block; }
+
+    #ui-overlay {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+    }
+
     #level-indicator {
         position: absolute; top: 10px; left: 10px;
         font-size: 1.5rem; font-weight: bold; color: white;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
+
     #menu {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background-color: rgba(22, 33, 62, 0.85);
         display: flex; flex-direction: column; justify-content: center; align-items: center;
-        text-align: center; backdrop-filter: blur(4px); z-index: 200;
+        text-align: center; backdrop-filter: blur(4px); z-index: 20;
         transition: opacity 0.3s ease;
     }
-    #menu.hidden, .hidden { opacity: 0; pointer-events: none; }
+
+    #menu.hidden { opacity: 0; pointer-events: none; }
     #menu h1 { font-size: 3rem; margin-bottom: 10px; color: white; text-shadow: 3px 3px 0px var(--action-color); }
     #menu p { font-size: 1.1rem; max-width: 80%; }
+
     #startButton {
         padding: 15px 30px; font-size: 1.2rem;
         background-color: var(--action-color); border: none; color: white;
@@ -50,152 +62,136 @@
         text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
         transition: transform 0.2s ease, background-color 0.2s ease;
     }
-    #startButton:hover:not(:disabled) { transform: scale(1.05); background-color: #f1687f; }
+
+    #startButton:hover:not(:disabled) {
+        transform: scale(1.05); background-color: #f1687f;
+    }
     #startButton:disabled { background-color: #555; cursor: not-allowed; }
-    #skin-selector-container { margin-top: 30px; display: flex; gap: 15px; padding: 10px; background-color: rgba(0,0,0,0.2); border-radius: 10px; }
-    .skin-choice { width: 60px; height: 60px; border: 3px solid var(--highlight-color); border-radius: 8px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease; display: flex; justify-content: center; align-items: center; background-color: #16213e; }
-    .skin-choice:hover { transform: scale(1.1); border-color: #f1687f; }
-    .skin-choice.selected { border-color: #f1c40f; transform: scale(1.1); box-shadow: 0 0 15px rgba(241, 196, 15, 0.7); }
-    .skin-choice canvas { width: 42px; height: 42px; }
-    #in-game-controls, #mobile-game-controls {
-        position: absolute;
-        top: 10px;
-        z-index: 160;
-        display: flex;
-        gap: 10px;
-        pointer-events: all;
-        transition: opacity 0.3s ease;
-    }
-    #in-game-controls { right: 10px; }
-    #mobile-game-controls { 
-        left: 50%;
-        transform: translateX(-50%);
-        display: none;
-    }
-    .ig-btn {
-        padding: 8px 15px;
-        font-size: 1rem;
-        font-weight: bold;
-        color: white;
-        background-color: rgba(0,0,0,0.4);
-        border: 2px solid rgba(255,255,255,0.5);
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .ig-btn svg { width: 20px; height: 20px; fill: white; }
-    .ig-btn:hover { background-color: rgba(0,0,0,0.7); }
-    #pause-overlay {
+
+    /* --- Player character --- */
+    #player-character { position: absolute; top: 0; left: 0; z-index: 10; }
+    .mario-mushroom { position: relative; width: 12em; height: 12em; font-size: 3.5px; }
+    .cap { position: absolute; top: 0; left: 0; width: 12em; height: 9em; background-color: #e43329; border: 0.5em solid #343434; border-radius: 6em 6em 1.5em 1.5em; overflow: hidden; box-shadow: inset 0 -0.5em 0.8em -0.2em rgba(0, 0, 0, 0.25); }
+    .cap::before, .cap::after { content: ''; position: absolute; bottom: 1em; width: 2.8em; height: 2.8em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
+    .cap::before { left: -0.8em; } .cap::after { right: -0.8em; }
+    .spot { position: absolute; top: 0.8em; left: 50%; transform: translateX(-50%); width: 5em; height: 5em; background-color: #fff; border: 0.4em solid #343434; border-radius: 50%; }
+    .stem { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 6em; height: 5em; background-color: #fce1b1; border: 0.5em solid #343434; border-top: none; border-radius: 0 0 2em 2em; }
+    .eye { position: absolute; bottom: 1.2em; width: 0.8em; height: 1.2em; background-color: #343434; border-radius: 0.4em; }
+    .eye:nth-of-type(1) { left: 1.4em; } .eye:nth-of-type(2) { right: 1.4em; }
+
+    /* Fade overlay for level transitions */
+    #transition-overlay {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(22, 33, 62, 0.7);
-        display: flex; justify-content: center; align-items: center;
-        font-size: 4rem; color: white; font-weight: bold;
-        text-shadow: 3px 3px 0px var(--action-color);
-        backdrop-filter: blur(4px);
-        z-index: 150;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
+        background-color: #000; opacity: 0; pointer-events: none; z-index: 100;
     }
-    #transition-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; opacity: 0; pointer-events: none; z-index: 100; }
+    
+    /* --- Mobile Controls --- */
     #mobile-controls {
         display: none;
         position: absolute;
-        bottom: 0;
+        bottom: 20px;
         left: 0;
         width: 100%;
-        height: 140px; /* Increased height to contain larger buttons */
         z-index: 50;
         user-select: none;
-        pointer-events: all;
     }
-    .control-area { position: absolute; bottom: 20px; display: flex; gap: 20px; }
+
+    .control-area { position: absolute; bottom: 0; display: flex; gap: 20px; }
     #move-controls { left: 20px; }
     #jump-control { right: 20px; }
     .control-btn {
-        /* CORRECTED: Increased size for better usability */
-        width: 80px; height: 80px;
+        width: 60px; height: 60px;
         background-color: rgba(255, 255, 255, 0.3);
         border: 2px solid rgba(255, 255, 255, 0.5);
         border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
-        /* CORRECTED: Adjusted font size */
-        font-size: 2.5rem;
-        color: white; font-weight: bold;
-        transition: transform 0.1s ease, background-color 0.1s ease;
+        font-size: 2rem; color: white; font-weight: bold;
     }
-    #jump-btn {
-        /* CORRECTED: Increased size for the primary action button */
-        width: 100px; height: 100px;
-    }
-    /* NEW: Added active state for tactile feedback */
-    .control-btn:active {
-        transform: scale(0.95);
-        background-color: rgba(255, 255, 255, 0.5);
-    }
-    
-    #orientation-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: white; z-index: 300; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-    .rotate-icon { width: 80px; height: 80px; margin-bottom: 20px; animation: rotate 2s linear infinite; }
-    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    #jump-btn { width: 80px; height: 80px; }
 
-    /* Media Queries for Device-Specific UI */
     @media (max-width: 768px) {
         #mobile-controls { display: block; }
-        #in-game-controls { display: none; }
-        #mobile-game-controls { display: flex; }
-        #menu p { display: none; } 
-        #menu h1 { font-size: 2rem; }
     }
+
+    /* --- NEW: Orientation Overlay --- */
+    #orientation-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--bg-color);
+        color: white;
+        z-index: 200;
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .rotate-icon { width: 80px; height: 80px; margin-bottom: 20px; animation: rotate 2s linear infinite; }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    /* Media query to show the overlay ONLY on mobile-sized screens in portrait mode */
     @media (orientation: portrait) and (max-width: 768px) {
-        #orientation-overlay { display: flex; }
+        #orientation-overlay {
+            display: flex;
+        }
     }
 </style>
 </head>
 <body>
 <div id="game-container">
     <canvas id="gameCanvas" width="960" height="540"></canvas>
-    <div id="ui-overlay">
-        <div id="level-indicator"></div>
-        <div id="in-game-controls" class="hidden">
-            <button id="pause-btn" class="ig-btn">Pause (P)</button>
-            <button id="restart-btn" class="ig-btn">Restart (R)</button>
+    <div id="player-character">
+        <div class="mario-mushroom">
+            <div class="cap"><div class="spot"></div></div>
+            <div class="stem"><div class="eye"></div><div class="eye"></div></div>
         </div>
-        <div id="mobile-game-controls" class="hidden">
-            <button id="mobile-pause-btn" class="ig-btn"></button>
-            <button id="mobile-restart-btn" class="ig-btn">
-                <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path></svg>
-            </button>
+    </div>
+    <div id="ui-overlay"><div id="level-indicator"></div></div>
+    <div id="mobile-controls">
+        <div id="move-controls" class="control-area">
+            <div id="left-btn" class="control-btn">‹</div>
+            <div id="right-btn" class="control-btn">›</div>
         </div>
-        <div id="mobile-controls">
-            <div id="move-controls" class="control-area">
-                <div id="left-btn" class="control-btn">‹</div>
-                <div id="right-btn" class="control-btn">›</div>
-            </div>
-            <div id="jump-control" class="control-area">
-                <div id="jump-btn" class="control-btn">▲</div>
-            </div>
+        <div id="jump-control" class="control-area">
+            <div id="jump-btn" class="control-btn">▲</div>
         </div>
     </div>
     <div id="menu">
         <h1 id="menu-title">2D Obby Challenge</h1>
         <p>Use arrow keys or A/D to move, and W or Space to jump.</p>
-        <div id="skin-selector-container"></div>
         <button id="startButton" disabled>Loading...</button>
     </div>
     <div id="transition-overlay"></div>
-    <div id="pause-overlay" class="hidden">PAUSED</div>
 </div>
+
+<!-- NEW: Orientation Overlay HTML -->
 <div id="orientation-overlay">
-    <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.8893 7.1107C15.918 6.13945 14.7334 5.4147 13.4357 5.01358C12.138 4.61246 10.7686 4.54694 9.44422 4.8235C8.11987 5.10006 6.8876 5.71018 5.86469 6.59853C4.84178 7.48688 4.06222 8.62734 3.60686 9.90955" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.3931 14.0905C19.9378 15.3727 19.1582 16.5131 18.1353 17.4015C17.1124 18.2898 15.8801 18.8999 14.5558 19.1765C13.2314 19.4531 11.862 19.3875 10.5643 18.9864C9.26661 18.5853 8.08199 17.8606 7.11074 16.8893L3.60693 20.3931" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.60693 14.0905V20.3931H9.90953" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.3931 9.90945V3.60685H14.0905" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.8893 7.1107C15.918 6.13945 14.7334 5.4147 13.4357 5.01358C12.138 4.61246 10.7686 4.54694 9.44422 4.8235C8.11987 5.10006 6.8876 5.71018 5.86469 6.59853C4.84178 7.48688 4.06222 8.62734 3.60686 9.90955" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.3931 14.0905C19.9378 15.3727 19.1582 16.5131 18.1353 17.4015C17.1124 18.2898 15.8801 18.8999 14.5558 19.1765C13.2314 19.4531 11.862 19.3875 10.5643 18.9864C9.26661 18.5853 8.08199 17.8606 7.11074 16.8893L3.60693 20.3931" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3.60693 14.0905V20.3931H9.90953" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.3931 9.90945V3.60685H14.0905" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
     <p>Please rotate your device to landscape mode.</p>
 </div>
+
 <script src="levels.js" defer></script>
 <script src="game.js" defer></script>
 <script>
-    function resizeGame(){const gameContainer=document.getElementById('game-container');const gameWidth=960;const gameHeight=540;const windowWidth=window.innerWidth;const windowHeight=window.innerHeight;const scale=Math.min(windowWidth/gameWidth,windowHeight/gameHeight);gameContainer.style.transform=`scale(${scale})`;gameContainer.style.left=`${(windowWidth-gameWidth*scale)/2}px`;gameContainer.style.top=`${(windowHeight-gameHeight*scale)/2}px`;}
-    window.addEventListener('load',resizeGame);window.addEventListener('resize',resizeGame);
+    function resizeGame() {
+        const gameContainer = document.getElementById('game-container');
+        const gameWidth = 960; const gameHeight = 540;
+        const windowWidth = window.innerWidth; const windowHeight = window.innerHeight;
+        const scale = Math.min(windowWidth / gameWidth, windowHeight / gameHeight);
+        gameContainer.style.transform = `scale(${scale})`;
+        gameContainer.style.left = `${(windowWidth - gameWidth * scale) / 2}px`;
+        gameContainer.style.top = `${(windowHeight - gameHeight * scale) / 2}px`;
+    }
+    window.addEventListener('load', resizeGame);
+    window.addEventListener('resize', resizeGame);
 </script>
 </body>
 </html>
